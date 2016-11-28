@@ -1,16 +1,29 @@
-LEVEL = ../../../..
+CC = gcc
 
-PROG     = bh
-CPPFLAGS = -DTORONTO
-LDFLAGS  = -lm
-ifdef LARGE_PROBLEM_SIZE
-RUN_OPTIONS = 40000 30
-else
-ifdef SMALL_PROBLEM_SIZE
-RUN_OPTIONS = 2000 5
-else
-RUN_OPTIONS = 20000 20
-endif
-endif
-include $(LEVEL)/MultiSource/Makefile.multisrc
+CCFLAGS =-w -c -I./$(SOURCEDIR) -DTORONTO
+LDFLAGS =-lm
 
+SOURCEDIR    = src
+BUILDDIR     = build
+
+SOURCE    = args newbh util walksub
+HEAD      = code defs stdinc vectmath
+
+HEADER = $(join $(addsuffix $(SOURCEDIR)/, $(dir $(HEAD))), $(notdir $(HEAD:=.h)))
+OBJECT = $(join $(addsuffix $(BUILDDIR)/, $(dir $(SOURCE))), $(notdir $(SOURCE:=.o)))
+
+EXECUTABLE = run
+
+all: exec
+
+exec: directory $(OBJECT) 
+	$(CC) $(OBJECT) $(LDFLAGS) -o $(EXECUTABLE) 
+
+directory:
+	mkdir -p $(BUILDDIR) 
+
+$(BUILDDIR)/%.o: $(SOURCEDIR)/%.c $(HEADER)
+	$(CC) $(CCFLAGS) $< -o $@
+
+clean:
+	rm -rf $(EXECUTABLE) $(BUILDDIR) *.json *.dot *.png *.out *.txt *.log

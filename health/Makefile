@@ -1,22 +1,29 @@
-LEVEL = ../../../..
+CC = gcc
 
-PROG     = health
-CPPFLAGS = -DTORONTO
-LDFLAGS  = -lm
+CCFLAGS =-w -c -I./$(SOURCEDIR) -DTORONTO
+LDFLAGS =-lm
 
-FP_TOLERANCE = 0.001
+SOURCEDIR    = src
+BUILDDIR     = build
 
-ifdef LARGE_PROBLEM_SIZE
-RUN_OPTIONS = 10 40 1
-else
-ifdef SMALL_PROBLEM_SIZE
-RUN_OPTIONS = 8 15 1
-else
-RUN_OPTIONS = 9 20 1
-ifeq ($(ARCH),XCore)
-XCORE_TARGET_NEEDS_MEMORY := 64
-endif
-endif
-endif
+SOURCE    = args health list poisson 
+HEAD      = health
 
-include $(LEVEL)/MultiSource/Makefile.multisrc
+HEADER = $(join $(addsuffix $(SOURCEDIR)/, $(dir $(HEAD))), $(notdir $(HEAD:=.h)))
+OBJECT = $(join $(addsuffix $(BUILDDIR)/, $(dir $(SOURCE))), $(notdir $(SOURCE:=.o)))
+
+EXECUTABLE = run
+
+all: exec
+
+exec: directory $(OBJECT) 
+	$(CC) $(OBJECT) $(LDFLAGS) -o $(EXECUTABLE) 
+
+directory:
+	mkdir -p $(BUILDDIR) 
+
+$(BUILDDIR)/%.o: $(SOURCEDIR)/%.c $(HEADER)
+	$(CC) $(CCFLAGS) $< -o $@
+
+clean:
+	rm -rf $(EXECUTABLE) $(BUILDDIR) *.json *.dot *.png *.out *.txt *.log

@@ -1,17 +1,29 @@
-LEVEL = ../../../..
+CC = gcc
 
-PROG       = treeadd
-CPPFLAGS   = -DTORONTO
-LDFLAGS    = 
+CCFLAGS =-w -c -I./$(SOURCEDIR) -DTORONTO
+LDFLAGS =-lm
 
-ifdef SMALL_PROBLEM_SIZE
-RUN_OPTIONS = 20
-else
-RUN_OPTIONS = 22
-ifeq ($(ARCH),XCore)
-XCORE_TARGET_NEEDS_MEMORY := 128
-endif
-endif
+SOURCEDIR    = src
+BUILDDIR     = build
 
-include $(LEVEL)/MultiSource/Makefile.multisrc
+SOURCE    = args node par-alloc
+HEAD      = tree
 
+HEADER = $(join $(addsuffix $(SOURCEDIR)/, $(dir $(HEAD))), $(notdir $(HEAD:=.h)))
+OBJECT = $(join $(addsuffix $(BUILDDIR)/, $(dir $(SOURCE))), $(notdir $(SOURCE:=.o)))
+
+EXECUTABLE = run
+
+all: exec
+
+exec: directory $(OBJECT) 
+	$(CC) $(OBJECT) $(LDFLAGS) -o $(EXECUTABLE) 
+
+directory:
+	mkdir -p $(BUILDDIR) 
+
+$(BUILDDIR)/%.o: $(SOURCEDIR)/%.c $(HEADER)
+	$(CC) $(CCFLAGS) $< -o $@
+
+clean:
+	rm -rf $(EXECUTABLE) $(BUILDDIR) *.json *.dot *.png *.out *.txt *.log

@@ -1,14 +1,29 @@
-LEVEL = ../../../..
+CC = gcc
 
-PROG       = em3d
-CPPFLAGS   = -DTORONTO
-LDFLAGS    = 
+CCFLAGS =-w -c -I./$(SOURCEDIR) -DTORONTO
+LDFLAGS =-lm
 
-ifdef SMALL_PROBLEM_SIZE
-RUN_OPTIONS = 256 250 35
-else
-RUN_OPTIONS = 1024 1000 125
-endif
+SOURCEDIR    = src
+BUILDDIR     = build
 
-include $(LEVEL)/MultiSource/Makefile.multisrc
+SOURCE    = args em3d main make_graph util 
+HEAD      = em3d make_graph util
 
+HEADER = $(join $(addsuffix $(SOURCEDIR)/, $(dir $(HEAD))), $(notdir $(HEAD:=.h)))
+OBJECT = $(join $(addsuffix $(BUILDDIR)/, $(dir $(SOURCE))), $(notdir $(SOURCE:=.o)))
+
+EXECUTABLE = run
+
+all: exec
+
+exec: directory $(OBJECT) 
+	$(CC) $(OBJECT) $(LDFLAGS) -o $(EXECUTABLE) 
+
+directory:
+	mkdir -p $(BUILDDIR) 
+
+$(BUILDDIR)/%.o: $(SOURCEDIR)/%.c $(HEADER)
+	$(CC) $(CCFLAGS) $< -o $@
+
+clean:
+	rm -rf $(EXECUTABLE) $(BUILDDIR) *.json *.dot *.png *.out *.txt *.log

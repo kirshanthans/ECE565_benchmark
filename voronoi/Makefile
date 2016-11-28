@@ -1,22 +1,29 @@
-LEVEL = ../../../..
+CC = gcc
 
-PROG     = voronoi
-INCLUDES = defines.h
-CPPFLAGS = -DTORONTO
-LDFLAGS  = -lm
-ifdef LARGE_PROBLEM_SIZE
-RUN_OPTIONS = 1000000 20 32 7
-else
-ifdef SMALL_PROBLEM_SIZE
-RUN_OPTIONS = 10000 20 32 7
-else
-RUN_OPTIONS = 100000 20 32 7
-ifeq ($(ARCH),XCore)
-XCORE_TARGET_NEEDS_MEMORY := 64
-endif
-endif
-endif
-HASH_PROGRAM_OUTPUT = 1
+CCFLAGS =-w -c -I./$(SOURCEDIR) -DTORONTO
+LDFLAGS =-lm
 
-include $(LEVEL)/MultiSource/Makefile.multisrc
+SOURCEDIR    = src
+BUILDDIR     = build
 
+SOURCE    = args newvor output vector
+HEAD      = defines
+
+HEADER = $(join $(addsuffix $(SOURCEDIR)/, $(dir $(HEAD))), $(notdir $(HEAD:=.h)))
+OBJECT = $(join $(addsuffix $(BUILDDIR)/, $(dir $(SOURCE))), $(notdir $(SOURCE:=.o)))
+
+EXECUTABLE = run
+
+all: exec
+
+exec: directory $(OBJECT) 
+	$(CC) $(OBJECT) $(LDFLAGS) -o $(EXECUTABLE) 
+
+directory:
+	mkdir -p $(BUILDDIR) 
+
+$(BUILDDIR)/%.o: $(SOURCEDIR)/%.c $(HEADER)
+	$(CC) $(CCFLAGS) $< -o $@
+
+clean:
+	rm -rf $(EXECUTABLE) $(BUILDDIR) *.json *.dot *.png *.out *.txt *.log

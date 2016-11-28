@@ -1,20 +1,29 @@
-LEVEL = ../../../..
+CC = gcc
 
-PROG     = tsp
-CPPFLAGS = -DTORONTO
-LDFLAGS  = -lm
-ifdef LARGE_PROBLEM_SIZE
-RUN_OPTIONS = 2048000
-else
-ifdef SMALL_PROBLEM_SIZE
-RUN_OPTIONS = 102400
-else
-RUN_OPTIONS = 1024000
-ifeq ($(ARCH),XCore)
-XCORE_TARGET_NEEDS_MEMORY := 64
-endif
-endif
-endif
+CCFLAGS =-w -c -I./$(SOURCEDIR) -DTORONTO
+LDFLAGS =-lm
 
-include $(LEVEL)/MultiSource/Makefile.multisrc
+SOURCEDIR    = src
+BUILDDIR     = build
 
+SOURCE    = args build main tsp
+HEAD      = tsp
+
+HEADER = $(join $(addsuffix $(SOURCEDIR)/, $(dir $(HEAD))), $(notdir $(HEAD:=.h)))
+OBJECT = $(join $(addsuffix $(BUILDDIR)/, $(dir $(SOURCE))), $(notdir $(SOURCE:=.o)))
+
+EXECUTABLE = run
+
+all: exec
+
+exec: directory $(OBJECT) 
+	$(CC) $(OBJECT) $(LDFLAGS) -o $(EXECUTABLE) 
+
+directory:
+	mkdir -p $(BUILDDIR) 
+
+$(BUILDDIR)/%.o: $(SOURCEDIR)/%.c $(HEADER)
+	$(CC) $(CCFLAGS) $< -o $@
+
+clean:
+	rm -rf $(EXECUTABLE) $(BUILDDIR) *.json *.dot *.png *.out *.txt *.log

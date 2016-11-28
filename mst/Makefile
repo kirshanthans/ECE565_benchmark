@@ -1,13 +1,29 @@
-LEVEL = ../../../..
+CC = gcc
 
-PROG       = mst
-CPPFLAGS   = -DTORONTO
-LDFLAGS    = 
-ifdef LARGE_PROBLEM_SIZE
-RUN_OPTIONS = 4000
-else
-RUN_OPTIONS = 1000
-endif
+CCFLAGS =-w -c -I./$(SOURCEDIR) -DTORONTO
+LDFLAGS =-lm
 
-include $(LEVEL)/MultiSource/Makefile.multisrc
+SOURCEDIR    = src
+BUILDDIR     = build
 
+SOURCE    = args hash main makegraph
+HEAD      = hash mst
+
+HEADER = $(join $(addsuffix $(SOURCEDIR)/, $(dir $(HEAD))), $(notdir $(HEAD:=.h)))
+OBJECT = $(join $(addsuffix $(BUILDDIR)/, $(dir $(SOURCE))), $(notdir $(SOURCE:=.o)))
+
+EXECUTABLE = run
+
+all: exec
+
+exec: directory $(OBJECT) 
+	$(CC) $(OBJECT) $(LDFLAGS) -o $(EXECUTABLE) 
+
+directory:
+	mkdir -p $(BUILDDIR) 
+
+$(BUILDDIR)/%.o: $(SOURCEDIR)/%.c $(HEADER)
+	$(CC) $(CCFLAGS) $< -o $@
+
+clean:
+	rm -rf $(EXECUTABLE) $(BUILDDIR) *.json *.dot *.png *.out *.txt *.log
