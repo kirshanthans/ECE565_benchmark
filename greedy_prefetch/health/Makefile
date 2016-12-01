@@ -1,7 +1,7 @@
 CC = gcc
 
-CCFLAGS =-w -c -O3 -I./$(SOURCEDIR) -DTORONTO
-LDFLAGS =-static -lm -O3
+CCFLAGS =-w -O3 -c -I./$(SOURCEDIR) -DTORONTO
+LDFLAGS =-O3 -static -lm 
 
 SOURCEDIR    = src
 BUILDDIR     = build
@@ -15,6 +15,9 @@ OBJECT = $(join $(addsuffix $(BUILDDIR)/, $(dir $(SOURCE))), $(notdir $(SOURCE:=
 EXECUTABLE = run
 
 all: exec
+
+arm: CC = arm-linux-gnueabi-gcc
+arm: exec
 
 exec: directory $(OBJECT) 
 	$(CC) $(OBJECT) $(LDFLAGS) -o $(EXECUTABLE) 

@@ -10,6 +10,18 @@ all:
 	cd tsp       ; make all ;
 	cd voronoi   ; make all ;
 
+arm:
+	cd bh        ; make arm ;
+	cd bisort    ; make arm ;
+	cd em3d      ; make arm ;
+	cd health    ; make arm ;
+	cd mst       ; make arm ;
+	cd perimeter ; make arm ;
+	cd power     ; make arm ;
+	cd treeadd   ; make arm ;
+	cd tsp       ; make arm ;
+	cd voronoi   ; make arm ;
+
 clean:
 	cd bh        ; make clean ;
 	cd bisort    ; make clean ;
