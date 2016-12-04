@@ -102,6 +102,10 @@ int TreeAdd (tree_t *t)
   if (t == NULL)  {
     return 0;
   }
+    
+    __builtin_prefetch(t->left);
+    __builtin_prefetch(t->right);
+   
   else {
 #ifdef FUTURES    
     future_cell_int leftval;

@@ -61,8 +61,10 @@ static ChildType reflect(Direction d, ChildType ct)
 int CountTree(QuadTree tree) 
 {
   QuadTree nw,ne,sw,se;
-
+  
+  
   nw = tree->nw; ne = tree->ne; sw = tree->sw; se = tree->se;
+  
   if (nw==NULL && ne==NULL && sw==NULL && se==NULL)
     return 1;
   else
@@ -123,6 +125,13 @@ static int sum_adjacent(QuadTree p, ChildType q1, ChildType q2, int size)
 
 int perimeter(QuadTree tree, int size)
 {
+    //!greedy prefetch commands
+    
+    __builtin_prefetch(tree->sw);
+    __builtin_prefetch(tree->se);
+    __builtin_prefetch(tree->ne);
+    __builtin_prefetch(tree->nw);
+
   int retval = 0;
   QuadTree neighbor;
 
