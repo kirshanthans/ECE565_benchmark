@@ -2,7 +2,7 @@
 
 #include "perimeter.h"
 #include <stdlib.h>
-#include "BumpAllocator.h"
+#include "bumpallocator.h"
 
 int CheckOutside(int x, int y)
 {

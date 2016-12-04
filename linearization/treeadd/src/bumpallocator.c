@@ -6,7 +6,7 @@
 //  Copyright © 2016 lsakka. All rights reserved.
 //
 
-#include "BumpAllocator.h"
+#include "bumpallocator.h"
 #include "stdlib.h"
 
 #define LINEARIZE

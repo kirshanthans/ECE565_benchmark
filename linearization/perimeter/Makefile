@@ -6,8 +6,8 @@ LDFLAGS =-O3 -static -lm
 SOURCEDIR    = src
 BUILDDIR     = build
 
-SOURCE    = args main maketree
-HEAD      = perimeter
+SOURCE    = args bumpallocator main maketree
+HEAD      = bumpallocator perimeter
 
 HEADER = $(join $(addsuffix $(SOURCEDIR)/, $(dir $(HEAD))), $(notdir $(HEAD:=.h)))
 OBJECT = $(join $(addsuffix $(BUILDDIR)/, $(dir $(SOURCE))), $(notdir $(SOURCE:=.o)))

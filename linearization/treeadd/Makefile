@@ -6,8 +6,8 @@ LDFLAGS =-O3 -static -lm
 SOURCEDIR    = src
 BUILDDIR     = build
 
-SOURCE    = args node par-alloc
-HEAD      = tree
+SOURCE    = args bumpallocator node par-alloc
+HEAD      = bumpallocator tree
 
 HEADER = $(join $(addsuffix $(SOURCEDIR)/, $(dir $(HEAD))), $(notdir $(HEAD:=.h)))
 OBJECT = $(join $(addsuffix $(BUILDDIR)/, $(dir $(SOURCE))), $(notdir $(SOURCE:=.o)))

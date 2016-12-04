@@ -1,6 +1,5 @@
 /* For copyright information, see olden_v1.0/COPYRIGHT */
 
-#define TORONTO
 #ifdef TORONTO
 extern int NumNodes;
 #define chatting      printf
