@@ -3,7 +3,7 @@
 #include "perimeter.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "BumpAllocator.h"
+#include "bumpallocator.h"
 #include <math.h>
 
 static int adj(Direction d, ChildType ct)
