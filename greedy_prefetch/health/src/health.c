@@ -48,6 +48,12 @@ struct Village *alloc_tree(int level, int label, struct Village *back) {
 				new->returned.back = NULL;
 				new->returned.forward = NULL;
 
+            //added prefetching
+            __builtin_prefetch(fval[0]);
+            __builtin_prefetch(fval[1]);
+            __builtin_prefetch(fval[2]);
+            __builtin_prefetch(fval[3]);
+
 				for (i = 0; i < 4; i++)
 						new->forward[i] = fval[i];
 
@@ -69,6 +75,12 @@ struct Results get_results(struct Village *village) {
 
 		if (village == NULL) return r1;
 
+        //added prefetching
+        __builtin_prefetch(village->forward[3]);
+        __builtin_prefetch(village->forward[2]);
+        __builtin_prefetch(village->forward[1]);
+        __builtin_prefetch(village->forward[0]);
+
 		for (i = 3; i > 0; i--) {
 				struct Village *V = village->forward[i];
 				fval[i] = get_results(V);
@@ -84,7 +96,10 @@ struct Results get_results(struct Village *village) {
 
 		list = village->returned.forward;
 		while (list != NULL) {
-				p = list->patient;
+                //added prefetching
+                __builtin_prefetch(list->forward);
+				
+                p = list->patient;
 				r1.total_hosps += (float)(p->hosps_visited);
 				r1.total_time += (float)(p->time); 
 				r1.total_patients += 1.0;
@@ -101,7 +116,10 @@ void check_patients_inside(struct Village *village, struct List *list)
 		int                     t;
 
 		while (list != NULL) {
-				p = list->patient;
+                //added prefetching
+                __builtin_prefetch(list->forward);
+				
+                p = list->patient;
 				t = p->time_left;
 				p->time_left = t - 1;
 				if (p->time_left == 0) {
@@ -123,6 +141,11 @@ struct List *check_patients_assess(struct Village *village, struct List *list) {
 		int label, t;
 
 		while (list != NULL) {
+            //added prefetching
+            __builtin_prefetch(list->forward);
+
+            // if we add prefetch for list->forward->patient it would be cool ! mm not sure if that is what we want
+
 				p = list->patient;
 				t = p->time_left;
 				p->time_left = t - 1;
@@ -158,7 +181,9 @@ void check_patients_waiting(struct Village *village, struct List *list) {
 		struct Patient *p;
 
 		while (list != NULL) {
+                //added prefetching
 				__builtin_prefetch(list->forward);
+            
 				i = village->hosp.free_personnel;
 				p = list->patient;
 				if (i > 0) {
@@ -264,7 +289,13 @@ struct List *sim(struct Village *village)
 		if (village == NULL) return NULL;
 
 		label = village->label;
-
+        //added prefetching
+        __builtin_prefetch(village->forward[3]);
+        __builtin_prefetch(village->forward[2]);
+        __builtin_prefetch(village->forward[1]);
+        __builtin_prefetch(village->forward[0]);
+        __builtin_prefetch(village->forward[0]);
+    
 		for (i = 3; i > 0; i--) {
 				struct Village *V = village->forward[i];
 				struct List *L = sim(V);
@@ -279,9 +310,12 @@ struct List *sim(struct Village *village)
 				if (l != NULL) {
 						l = l->forward;
 						while (l != NULL) {
-								put_in_hosp(h, l->patient);
-								removeList(valI, l->patient);
-								l = l->forward;
+                            //added prefetching
+                            __builtin_prefetch(l->forward);
+                            
+                            put_in_hosp(h, l->patient);
+                            removeList(valI, l->patient);
+                            l = l->forward;
 						}
 				}
 		}
@@ -293,6 +327,10 @@ struct List *sim(struct Village *village)
 		/*** Generate new patients ***/  
 		if ((patient = generate_patient(village)) != NULL) {  
 				label = village->label;
+            
+                //added prefetching
+                __builtin_prefetch(village->label);
+
 				put_in_hosp(&village->hosp, patient);
 		}
 

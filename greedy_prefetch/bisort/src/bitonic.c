@@ -29,6 +29,9 @@ int flag=0,foo=0;
 void InOrder(HANDLE *h) {
   HANDLE *l, *r;
   if ((h != NIL)) {
+    __builtin_prefetch(h->left);
+    __builtin_prefetch(h->right);
+
     l = h->left;
     r = h->right;
     InOrder(l);
