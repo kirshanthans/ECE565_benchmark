@@ -109,7 +109,7 @@ int main(int argc, char **argv)
     Varient mode;
     //number of times the traversal will run and not number of TRIALS
     
-    int itterations=10;
+    int itterations=2000;
     readInput(argc,  argv, data, rad, pointCount,mode);
 
     
