@@ -101,7 +101,7 @@ int main(int argc, char **argv)
     float rad;
     int npoints;
     Varient mode;
-    int itterations=10;
+    int itterations=2000;
     
     readInput(argc,  argv, data, rad, npoints,mode);
     
