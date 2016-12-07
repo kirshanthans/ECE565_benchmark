@@ -8,6 +8,9 @@ extern int flag;
 void print_tree(Tree t)
 {
   Tree left,right;
+    //added prefetching
+    __builtin_prefetch(t->left);
+    __builtin_prefetch(t->right);
 
   double x,y;
 
@@ -29,6 +32,9 @@ void print_list(Tree t)
   chatting("%f %f\n",x,y);
   for (tmp=t->next; tmp!=t; tmp=tmp->next) 
     {
+    //added prefetching
+    __builtin_prefetch(tmp->next);
+        
     x = tmp->x; y = tmp->y;
     chatting("%f %f\n",x,y);
     }

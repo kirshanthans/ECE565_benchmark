@@ -18,13 +18,17 @@ static double distance(Tree a, Tree b) {
   double ax,ay,bx,by;
 
   ax = a->x; ay = a->y;
-  bx = b->x; by = b->y;
+  bx = b->x; by = b->yb->next;
   return (sqrt((ax-bx)*(ax-bx)+(ay-by)*(ay-by)));
 }
 
 /* sling tree nodes into a list -- requires root to be tail of list */
 /* only fills in next field, not prev */
 static Tree makelist(Tree t) {
+    //added prefetching
+  __builtin_prefetch(t->left);
+  __builtin_prefetch(t->right);
+
   Tree left, right;
   Tree tleft,tright;
   Tree retval = t;
@@ -54,7 +58,11 @@ static void reverse(Tree t) {
   back = t;
   tmp = t;
   for (t=t->next; t; back=t,t=next) {
+
     next = t->next;
+    //added prefetching
+    __builtin_prefetch(next);
+
     t->next = back;
     back->prev = t;
     }
@@ -83,9 +91,19 @@ static Tree conquer(Tree t) {
 
   for (; t; t=donext) { /* loop over remaining points */
     donext = t->next; /* value won't be around later */
+      
+    //added prefetching
+    __builtin_prefetch(donext);
+      
+      
     min = cycle;
     mindist = distance(t,cycle);
     for (tmp=cycle->next; tmp!=cycle; tmp=tmp->next) {
+        //added prefetching
+        __builtin_prefetch(tmp->next);
+        
+
+        
       test = distance(tmp,t);
       if (test < mindist) {
         mindist = test;
@@ -131,6 +149,10 @@ static Tree merge(Tree a, Tree b, Tree t, int nproc) {
   mindist = distance(t,a);
   tmp = a;
   for (a=a->next; a!=tmp; a=a->next) {
+      //added prefetching
+      __builtin_prefetch(a->next);
+      
+
     test = distance(a,t);
     if (test < mindist) {
       mindist = test;
@@ -162,6 +184,9 @@ static Tree merge(Tree a, Tree b, Tree t, int nproc) {
   mindist = distance(t,b);
   tmp = b;
   for (b=b->next; b!=tmp; b=b->next) {
+      //added prefetching
+      __builtin_prefetch(b->next);
+
     test = distance(b,t);
     if (test < mindist) {
       mindist = test;
