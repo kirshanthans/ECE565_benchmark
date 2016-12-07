@@ -9,7 +9,7 @@
 #include "tree_bumpalloc.h"
 #include <assert.h>
 
-char* BumpAllocator::heap_ptr= (char *)malloc(900000000lu * sizeof(Tree_Node));
+char* BumpAllocator::heap_ptr= (char *)malloc(90000000lu * sizeof(Tree_Node));
 
 void readPoint(FILE *in, Point & p){
     int dummy;

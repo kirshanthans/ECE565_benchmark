@@ -18,7 +18,7 @@ static double distance(Tree a, Tree b) {
   double ax,ay,bx,by;
 
   ax = a->x; ay = a->y;
-  bx = b->x; by = b->yb->next;
+  bx = b->x; by = b->y;
   return (sqrt((ax-bx)*(ax-bx)+(ay-by)*(ay-by)));
 }
 
