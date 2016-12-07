@@ -49,10 +49,10 @@ struct Village *alloc_tree(int level, int label, struct Village *back) {
 				new->returned.forward = NULL;
 
             //added prefetching
-            __builtin_prefetch(fval[0]);
-            __builtin_prefetch(fval[1]);
-            __builtin_prefetch(fval[2]);
-            __builtin_prefetch(fval[3]);
+            //__builtin_prefetch(fval[0]);
+            //__builtin_prefetch(fval[1]);
+            //__builtin_prefetch(fval[2]);
+            //__builtin_prefetch(fval[3]);
 
 				for (i = 0; i < 4; i++)
 						new->forward[i] = fval[i];
@@ -82,6 +82,7 @@ struct Results get_results(struct Village *village) {
         __builtin_prefetch(village->forward[0]);
 
 		for (i = 3; i > 0; i--) {
+        		//__builtin_prefetch(village->forward[i-1]);
 				struct Village *V = village->forward[i];
 				fval[i] = get_results(V);
 		}
@@ -294,7 +295,6 @@ struct List *sim(struct Village *village)
         __builtin_prefetch(village->forward[2]);
         __builtin_prefetch(village->forward[1]);
         __builtin_prefetch(village->forward[0]);
-        __builtin_prefetch(village->forward[0]);
     
 		for (i = 3; i > 0; i--) {
 				struct Village *V = village->forward[i];
@@ -329,7 +329,7 @@ struct List *sim(struct Village *village)
 				label = village->label;
             
                 //added prefetching
-                __builtin_prefetch(village->label);
+                //__builtin_prefetch(village->label);
 
 				put_in_hosp(&village->hosp, patient);
 		}
