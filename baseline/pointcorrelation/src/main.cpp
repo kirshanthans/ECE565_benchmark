@@ -111,7 +111,7 @@ int main(int argc, char **argv)
     
     int itterations=2000;
     readInput(argc,  argv, data, rad, pointCount,mode);
-
+    
     
     cout<<"benchmarking mode: "<<( mode==Varient::intOut? "intout":
                                   ( mode== Varient::treeOut ? ("treeout"):
