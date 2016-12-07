@@ -26,6 +26,7 @@ static double distance(Tree a, Tree b) {
 /* only fills in next field, not prev */
 static Tree makelist(Tree t) {
     //added prefetching
+    if (!t) return NULL;
   __builtin_prefetch(t->left);
   __builtin_prefetch(t->right);
 
@@ -33,7 +34,6 @@ static Tree makelist(Tree t) {
   Tree tleft,tright;
   Tree retval = t;
 
-  if (!t) return NULL;
 
   left = makelist(t->left); /* head of left list */
   right = makelist(t->right); /* head of right list */

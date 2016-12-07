@@ -7,14 +7,14 @@ extern int flag;
 
 void print_tree(Tree t)
 {
-  Tree left,right;
+    if (!t) return;
     //added prefetching
     __builtin_prefetch(t->left);
     __builtin_prefetch(t->right);
+    Tree left,right;
 
   double x,y;
 
-  if (!t) return;
   x = t->x; y = t->y;
   chatting("x=%f,y=%f\n",x,y);
   left = t->left; right=t->right;
