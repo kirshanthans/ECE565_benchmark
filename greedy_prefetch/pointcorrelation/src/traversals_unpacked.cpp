@@ -12,7 +12,7 @@
 void  printUnpackedTree(Tree_Node * node){
     //print Tag
     
-  
+    
     cout<<" ,tag:"<<node->tag<<endl;
     
     if(node->tag==LEAF_TAG){
@@ -24,14 +24,15 @@ void  printUnpackedTree(Tree_Node * node){
         cout<<" ,max_x:"<<node->innerData.max_x<<endl;
         cout<<" ,min_y:"<<node->innerData.min_y;
         cout<<" ,max_y:"<<node->innerData.max_y<<endl;
-
-       printUnpackedTree(node->innerData.leftChild);
-       printUnpackedTree(node->innerData.rightChild);
+        
+        printUnpackedTree(node->innerData.leftChild);
+        printUnpackedTree(node->innerData.rightChild);
     }
     
 }
 
 void  performPointCorr_OnTree(Point & p,Tree_Node * node ,float rad){
+    
     
     if(node->tag == LEAF_TAG){
         float d = 0;
@@ -46,7 +47,8 @@ void  performPointCorr_OnTree(Point & p,Tree_Node * node ,float rad){
 #endif
         }
     }else {
-        
+        __builtin_prefetch(node->innerData.leftChild);
+        __builtin_prefetch(node->innerData.rightChild);
         float sum    = 0.0;
         float boxsum = 0.0;
         float center_x  = ( node->innerData.max_x + node->innerData.min_x )/ 2;
@@ -83,7 +85,7 @@ int   performPointCorr_IntOut(Point & p,Tree_Node * node ,float rad){
         d +=(p.y_val - node->leafData.y_val) *(p.y_val - node->leafData.y_val);
         
         if(sqrt(d) < rad){
-           // node->leafData.corr++;
+            // node->leafData.corr++;
             return 1;
         }
         return 0;
@@ -120,7 +122,7 @@ int   performPointCorr_IntOut(Point & p,Tree_Node * node ,float rad){
             
         }else{
             //call left
-           return  performPointCorr_IntOut(p, node->innerData.leftChild, rad)+  performPointCorr_IntOut(p,  node->innerData.rightChild, rad);
+            return  performPointCorr_IntOut(p, node->innerData.leftChild, rad)+  performPointCorr_IntOut(p,  node->innerData.rightChild, rad);
             
             
         }
@@ -139,14 +141,14 @@ void deleteTree(Tree_Node * node){
         deleteTree(node->innerData.rightChild);
         delete node;
         return ;
-
-    
+        
+        
     }
-
+    
 }
 
 Tree_Node *   copyNodes(Tree_Node * node){
- 
+    
     Tree_Node * nodeRet=(Tree_Node *)malloc(sizeof(Tree_Node));
 #ifdef TEST
     nodeCount_test++;
@@ -156,7 +158,7 @@ Tree_Node *   copyNodes(Tree_Node * node){
     {
         nodeRet->tag=LEAF_TAG;
         nodeRet->leafData=node->leafData;
-    
+        
     }else if(node->tag==INNER_TAG){
         nodeRet->tag=INNER_TAG;
         nodeRet->innerData=node->innerData;
@@ -173,14 +175,14 @@ Tree_Node *   performPointCorr_TreeOut(Point & p,Tree_Node * node ,float rad){
     nodeCount_test++;
 #endif
     nodeOut->tag=node->tag;
-
+    
     if(node->tag == LEAF_TAG){
         float d = 0;
         
         //copy unchanged data
         nodeOut->leafData.x_val=node->leafData.x_val;
         nodeOut->leafData.y_val=node->leafData.y_val;
-
+        
         //set the counter
         d +=(p.x_val - node->leafData.x_val) *(p.x_val - node->leafData.x_val);
         d +=(p.y_val - node->leafData.y_val) *(p.y_val - node->leafData.y_val);
@@ -190,7 +192,7 @@ Tree_Node *   performPointCorr_TreeOut(Point & p,Tree_Node * node ,float rad){
 #ifdef TEST
             counter2++;
 #endif
-      
+            
         }
         else{
             nodeOut->leafData.corr=node->leafData.corr;
@@ -204,7 +206,7 @@ Tree_Node *   performPointCorr_TreeOut(Point & p,Tree_Node * node ,float rad){
         nodeOut->innerData.min_y=node->innerData.min_y;
         nodeOut->innerData.splitAxis=node->innerData.splitAxis;
         nodeOut->innerData.splitLoc=node->innerData.splitLoc;
-
+        
         float sum    = 0.0;
         float boxsum = 0.0;
         float center_x  = ( node->innerData.max_x + node->innerData.min_x )/ 2;
@@ -222,13 +224,13 @@ Tree_Node *   performPointCorr_TreeOut(Point & p,Tree_Node * node ,float rad){
         bool canCorrelate = sqrt(sum) - sqrt(boxsum) < rad;
         
         if(!(canCorrelate)){
-        
+            
             nodeOut->innerData.leftChild=copyNodes(node->innerData.leftChild);
             nodeOut->innerData.rightChild=copyNodes(node->innerData.rightChild);
-        
+            
         }else{
-             nodeOut->innerData.leftChild  =  performPointCorr_TreeOut(p, node->innerData.leftChild, rad);
-             nodeOut->innerData.rightChild =  performPointCorr_TreeOut(p,  node->innerData.rightChild, rad);
+            nodeOut->innerData.leftChild  =  performPointCorr_TreeOut(p, node->innerData.leftChild, rad);
+            nodeOut->innerData.rightChild =  performPointCorr_TreeOut(p,  node->innerData.rightChild, rad);
             
         }
         return nodeOut;
