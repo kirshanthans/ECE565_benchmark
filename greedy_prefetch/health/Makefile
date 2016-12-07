@@ -1,7 +1,7 @@
-CC = icc
+CC = gcc
 
-CCFLAGS =-w -c -I./$(SOURCEDIR) -DTORONTO
-LDFLAGS =-static -lm 
+CCFLAGS =-w -O3 -c -I./$(SOURCEDIR) -DTORONTO
+LDFLAGS =-O3 -static -lm 
 
 SOURCEDIR    = src
 BUILDDIR     = build
