@@ -10,6 +10,7 @@ all:
 	cd tsp              ; make all ;
 	cd voronoi          ; make all ;
 	cd pointcorrelation ; make all ;
+	cd simpletree       ; make all ;
 
 arm:
 	cd bh               ; make arm ;
@@ -23,6 +24,7 @@ arm:
 	cd tsp              ; make arm ;
 	cd voronoi          ; make arm ;
 	cd pointcorrelation ; make arm ;
+	cd simpletree       ; make arm ;
 
 clean:
 	cd bh               ; make clean ;
@@ -36,3 +38,4 @@ clean:
 	cd tsp              ; make clean ;
 	cd voronoi          ; make clean ;
 	cd pointcorrelation ; make clean ;
+	cd simpletree       ; make clean ;

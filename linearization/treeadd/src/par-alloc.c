@@ -8,7 +8,7 @@
 #include "future-cell.h"
 #endif
 
-#include "BumpAllocator.h"
+#include "bumpallocator.h"
 #include "tree.h"
 //extern void *malloc(unsigned);
 

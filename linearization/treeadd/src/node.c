@@ -3,7 +3,7 @@
 /* node.c
  */
 #define TORONTO
-#include "BumpAllocator.h"
+#include "bumpallocator.h"
 #include <math.h>
 #ifndef TORONTO
 #include <cm/cmmd.h>
