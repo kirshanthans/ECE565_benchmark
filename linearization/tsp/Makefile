@@ -6,8 +6,8 @@ LDFLAGS =-O3 -static -lm
 SOURCEDIR    = src
 BUILDDIR     = build
 
-SOURCE    = args build main tsp
-HEAD      = tsp
+SOURCE    = args bumpallocator build main tsp
+HEAD      = bumpallocator tsp
 
 HEADER = $(join $(addsuffix $(SOURCEDIR)/, $(dir $(HEAD))), $(notdir $(HEAD:=.h)))
 OBJECT = $(join $(addsuffix $(BUILDDIR)/, $(dir $(SOURCE))), $(notdir $(SOURCE:=.o)))

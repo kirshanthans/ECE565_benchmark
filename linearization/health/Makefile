@@ -6,8 +6,8 @@ LDFLAGS =-O3 -static -lm
 SOURCEDIR    = src
 BUILDDIR     = build
 
-SOURCE    = args health list poisson 
-HEAD      = health
+SOURCE    = args bumpallocator health list poisson 
+HEAD      = bumpallocator health
 
 HEADER = $(join $(addsuffix $(SOURCEDIR)/, $(dir $(HEAD))), $(notdir $(HEAD:=.h)))
 OBJECT = $(join $(addsuffix $(BUILDDIR)/, $(dir $(SOURCE))), $(notdir $(SOURCE:=.o)))
