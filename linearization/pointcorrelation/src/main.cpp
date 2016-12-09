@@ -2,7 +2,7 @@
 #include <chrono>
 #include <assert.h>
 
-#define  TRIALS 10
+#define  TRIALS 1
 
 int counter=0;
 int counter2=0;
@@ -101,7 +101,7 @@ int main(int argc, char **argv)
     float rad;
     int npoints;
     Varient mode;
-    int itterations=2000;
+    int itterations=10;
     
     readInput(argc,  argv, data, rad, npoints,mode);
     
