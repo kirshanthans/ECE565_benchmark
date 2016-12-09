@@ -2,7 +2,7 @@
 #include <assert.h>
 #include <chrono>
 
-#define  TRIALS 10
+#define  TRIALS 1
 
 
 //these variables are used only in test mode
@@ -109,7 +109,7 @@ int main(int argc, char **argv)
     Varient mode;
     //number of times the traversal will run and not number of TRIALS
     
-    int itterations=2000;
+    int itterations=10;
     readInput(argc,  argv, data, rad, pointCount,mode);
     
     
